@@ -1,4 +1,5 @@
 # coinapi-rs
+
 Unofficial CoinAPI Rust SDK for the [Coinapi.io](https://docs.coinapi.io/)
 
 [![Build Status](https://travis-ci.org/soerenmartius/coinapi-rs.png?branch=master)](https://travis-ci.org/soerenmartius/coinapi-rs)
@@ -6,17 +7,17 @@ Unofficial CoinAPI Rust SDK for the [Coinapi.io](https://docs.coinapi.io/)
 
 Welcome to the unofficial CoinAPI Rust SDK. This repository contain SDK for our CoinAPI's documented at https://docs.coinapi.io/
 
-
-
 ## To-Do
 
 ### General
+
 - [x] Error handling with [Failure](https://crates.io/crates/failure)
 - [ ] Implement [Log](https://crates.io/crates/log)
 - [ ] [Lazy](https://crates.io/crates/lazy_static) load collections
 - [ ] Implement tests
 
 ### API Implementation Status
+
 - [ ] REST API
   - [x] General
     - [x] Authorization
@@ -28,10 +29,10 @@ Welcome to the unofficial CoinAPI Rust SDK. This repository contain SDK for our 
   - [x] Exchanges rates
     - [x] Get specific rate
     - [x] Get all current rates
-  - [ ] OHLCV
-    - [ ] List all periods
-    - [ ] Latest data
-    - [ ] Historical Data
+  - [x] OHLCV
+    - [x] List all periods
+    - [x] Latest data
+    - [x] Historical Data
   - [ ] Trades
     - [ ] Current data
     - [ ] Latest data
@@ -49,20 +50,19 @@ Welcome to the unofficial CoinAPI Rust SDK. This repository contain SDK for our 
   - [ ] General
     - [ ] Hello
   - [ ] Messages
-      - [ ] Trades
-      - [ ] Quotes
-      - [ ] Book
-      - [ ] Book5
-      - [ ] Book20
-      - [ ] Book50
-      - [ ] Heartbeat
+    - [ ] Trades
+    - [ ] Quotes
+    - [ ] Book
+    - [ ] Book5
+    - [ ] Book20
+    - [ ] Book50
+    - [ ] Heartbeat
 - [ ] FIX API
-    - [ ] Logon (A)
-    - [ ] Logout (5)
-    - [ ] Trades (X)
-    - [ ] Orderbooks (W)
-    - [ ] Heartbeat (0)
-
+  - [ ] Login (A)
+  - [ ] Logout (5)
+  - [ ] Trades (X)
+  - [ ] Orderbooks (W)
+  - [ ] Heartbeat (0)
 
 ## Usage
 
@@ -73,7 +73,7 @@ Add this to your Cargo.toml
 coinapi = { git = "https://github.com/soerenmartius/coinapi-rs.git" }
 ```
 
-### Metadata 
+### Metadata
 
 #### List all exchanges
 
@@ -108,6 +108,7 @@ fn main() {
 ```
 
 #### List all symbols
+
 ```rust
 use coinapi_rs::metadata::*;
 
@@ -126,6 +127,7 @@ fn main() {
 ### Exchange rates
 
 #### Get specific rate
+
 ```rust
 use coinapi_rs::exchangerate::*;
 use chrono::Utc;
@@ -144,6 +146,7 @@ fn main() {
 ```
 
 #### Get all current rates
+
 ```rust
 use coinapi_rs::exchangerate::*;
 
@@ -157,3 +160,61 @@ fn main() {
     }
 }
 ```
+
+### OHLCV
+
+#### List all periods
+```rust
+use coinapi_rs::ohlcv::*;
+
+fn main() {
+    let ohlcv: OHLCV = Coinapi::new(String::from
+    ("YOUR_API_KEY_HERE"));
+    let data = ohlcv.list_all_periods();
+
+    match data {
+      Ok(r)  => println!("{:#?}", r),
+      Err(e) => println!("Error: {:?}", e)
+    }
+}
+```
+
+#### Latest data
+```rust
+use coinapi_rs::ohlcv::*;
+use chrono::Utc;
+
+fn main() {
+    let ohlcv: OHLCV = Coinapi::new(String::from
+    ("YOUR_API_KEY_HERE"));
+    let data = ohlcv.latest_data("BITSTAMP_SPOT_BTC_USD", "1MIN", Some(false), Some(100i32));
+
+    match data {
+      Ok(r)  => println!("{:#?}", r),
+      Err(e) => println!("Error: {:?}", e)
+    }
+}
+```
+
+### Historical data
+```rust
+use coinapi_rs::ohlcv::*;
+use chrono::Utc;
+
+fn main() {
+    let ohlcv: OHLCV = Coinapi::new(String::from
+    ("YOUR_API_KEY_HERE"));
+    let start_time = Utc.ymd(2020, 8, 20).and_hms(5, 55, 55);
+    let end_time = Utc.ymd(2020, 8, 27).and_hms(5, 55, 55);
+    let data = ohlcv.historical_data("BITSTAMP_SPOT_BTC_USD", "1MIN", start_time, Some(time_end), None, Some(100i32));
+
+    match data {
+      Ok(r)  => println!("{:#?}", r),
+      Err(e) => println!("Error: {:?}", e)
+    }
+}
+
+## Contributors
+
+- [Blake Willoughby](https://github.com/byblakeorriver)
+- [Soren Martius](https://github.com/soerenmartius)
